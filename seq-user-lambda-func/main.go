@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )
@@ -16,7 +17,7 @@ type Response struct {
 }
 
 func handler(request Request) (Response, error) {
-	greeting := fmt.Sprintf("Hello v1, %s! %s", request.Name, request.Message)
+	greeting := fmt.Sprintf("Hello v2, %s! %s, %v", request.Name, request.Message, time.Now())
 
 	return Response{
 		Greeting: greeting,

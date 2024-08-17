@@ -1,19 +1,25 @@
-.PHONY: sam-build invoke lambda build zip clean
+.PHONY: sam-build invoke lambda clean deploy deploy-sq
 
 sam-build:
 	sam build
 
-invoke: ## Run sam local invoke for MapFileBundleFunction
+invoke: sam-build ## Run sam local invoke for MapFileBundleFunction
 	sam local invoke "DevAdminFunction" -e events/event.json
 
-lambda: ## Run sam local start-lambda
+invoke-sq: sam-build ## Run sam local invoke for MapFileBundleFunction
+	sam local invoke "SeqUserLambdaFunction" -e events/event.json
+
+lambda: sam-build ## Run sam local start-lambda
 	sam local start-lambda
 
+## CI/CD
 build: ## Build the Lambda function
 	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/bootstrap dev-admin-func/main.go
 
-## デプロイ用にzip化
-zip: build
+build-sq: ## Build the Lambda function
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/bootstrap seq-user-lambda-func/main.go
+
+zip:
 	zip -j bin/bootstrap.zip bin/bootstrap
 
 clean:
@@ -21,3 +27,6 @@ clean:
 
 deploy: ## AWS CLIを使用してLambda関数を更新
 	aws lambda update-function-code --function-name DevAdminFunction --zip-file fileb://bin/bootstrap.zip
+
+deploy-sq: ## AWS CLIを使用してLambda関数を更新
+	aws lambda update-function-code --function-name SeqUserLambdaFunction --zip-file fileb://bin/bootstrap.zip
