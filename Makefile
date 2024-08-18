@@ -30,3 +30,11 @@ deploy: ## AWS CLIを使用してLambda関数を更新
 
 deploy-sq: ## AWS CLIを使用してLambda関数を更新
 	aws lambda update-function-code --function-name SeqUserLambdaFunction --zip-file fileb://bin/bootstrap.zip
+
+## -------------------------------------------------------
+arm-build:
+	cd dev-admin-func &&
+	GOOS=darwin GOARCH=arm64 go build -gcflags="all=-N -l" -o main_local_arm
+
+dlv:
+	dlv exec --headless --listen=:5986 --api-version=2 --accept-multiclient ./main_local_armk

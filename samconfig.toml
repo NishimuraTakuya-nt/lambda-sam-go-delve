@@ -7,8 +7,10 @@ version = 0.1
 stack_name = "lambda-sam-go-delve"
 
 [default.build.parameters]
-cached = true
-parallel = true
+#cached = true
+#parallel = true
+parameter_overrides = "BuildCmd='GOARCH=amd64 GOOS=linux go build -gcflags=\"all=-N -l\" -o bootstrap dev-admin-func/main.go'"
+#parameter_overrides = "BuildCmd='GOOS=darwin GOARCH=arm64 go build -gcflags=\"all=-N -l\" -o bootstrap dev-admin-func/main.go'"
 
 [default.validate.parameters]
 lint = true
@@ -29,3 +31,10 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
+debug_port = "5986"
+debug_args = "-delveAPI=2"
+
+[default.local_invoke]
+[default.local_invoke.parameters]
+debug_port = 5986
+debug_args = "-delveAPI=2"
