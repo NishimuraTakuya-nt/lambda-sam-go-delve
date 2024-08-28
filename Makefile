@@ -14,7 +14,7 @@ lambda: sam-build ## Run sam local start-lambda
 
 ## CI/CD
 build: ## Build the Lambda function
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/bootstrap dev-admin-func/main.go
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/bootstrap dev-admin-func/*.go
 
 build-sq: ## Build the Lambda function
 	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/bootstrap seq-user-lambda-func/main.go

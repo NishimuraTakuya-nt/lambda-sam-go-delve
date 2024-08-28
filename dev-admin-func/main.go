@@ -1,28 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-type Request struct {
-	Name    string `json:"name"`
-	Message string `json:"message"`
+type Event struct {
+	N int `json:"n"`
 }
 
 type Response struct {
-	Greeting string `json:"greeting"`
-}
-
-func handler(request Request) (Response, error) {
-	greeting := fmt.Sprintf("Hello v1, %s! %s", request.Name, request.Message)
-
-	return Response{
-		Greeting: greeting,
-	}, nil
+	Message    string        `json:"message"`
+	PrimeCount int           `json:"primeCount"`
+	Duration   time.Duration `json:"duration"`
 }
 
 func main() {
-	lambda.Start(handler)
+	h := NewHandler()
+	lambda.Start(h.handler)
 }
